@@ -35,9 +35,10 @@ $(function () {
   let lastTypingTime;
   let $currentInput = $usernameInput.focus();
 
-  // Establish the WebSocket
+  // Establish the WebSocket Connection
   let socket = io();
 
+  /* All of our functions to help handle Socket Events */
   /**
    * Adds number of participants to the chat to the screen.
    * @param {Object} data The data object representing state.
@@ -101,8 +102,11 @@ $(function () {
     addMessageElement($el, options);
   };
 
-  /* Refactor Out */
-  // Adds the visual chat message to the message list
+  /**
+   * Builds up the element that ultimately gets added to the chat message window.
+   * @param {Object} data Information about the incoming chat message to be added (username, message)
+   * @param {Object} options Information about how to display the new message
+   */
   const addChatMessage = (data, options) => {
     // Don't fade the message in if there is an 'X was typing'
     let $typingMessages = getTypingMessages(data.username);
@@ -158,7 +162,7 @@ $(function () {
   };
 
 
-  // Keyboard events
+  // KEYBOARD EVENTS
 
   $window.keydown((event) => {
     // Auto-focus the current input when a key is typed
@@ -199,7 +203,7 @@ $(function () {
     }
   });
 
-  // Click events
+  // CLICK EVENTS
 
   // Focus input when clicking anywhere on login page
   $loginPage.click(() => {
@@ -211,8 +215,8 @@ $(function () {
     $inputMessage.focus();
   });
 
-  // Socket events
-
+  // SOCKET EVENTS
+  
   // Whenever the server emits 'login', log the login message
   socket.on("login", (data) => {
     connected = true;
