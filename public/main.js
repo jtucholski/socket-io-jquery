@@ -72,7 +72,8 @@ $(function () {
   };
 
 /**
- * Sends the websocket server an event that a new message was added
+ * If connected, we'll send a message to the websocket server that
+ * a new message was added.
  */
   const sendMessage = () => {
     let message = $inputMessage.val();
@@ -125,11 +126,11 @@ $(function () {
     addMessageElement($messageDiv, options);
   };
 
-  // Adds a message element to the messages and scrolls to the bottom
-  // el - The element to add as a message
-  // options.fade - If the element should fade-in (default = true)
-  // options.prepend - If the element should prepend
-  //   all other messages (default = false)
+  /**
+   * Adds a new message element to the messages and scrolls to the bottom
+   * @param {HtmlElement} el The element to add as a message
+   * @param {Object} options How the element should be added (fade, prepend)
+   */
   const addMessageElement = (el, options) => {
     let $el = $(el);
 
@@ -156,25 +157,6 @@ $(function () {
     $messages[0].scrollTop = $messages[0].scrollHeight;
   };
 
-  // Updates the typing event
-  const updateTyping = () => {
-    if (connected) {
-      if (!typing) {
-        typing = true;
-        socket.emit("typing");
-      }
-      lastTypingTime = new Date().getTime();
-
-      setTimeout(() => {
-        let typingTimer = new Date().getTime();
-        let timeDiff = typingTimer - lastTypingTime;
-        if (timeDiff >= TYPING_TIMER_LENGTH && typing) {
-          socket.emit("stop typing");
-          typing = false;
-        }
-      }, TYPING_TIMER_LENGTH);
-    }
-  };
 
   // Keyboard events
 
@@ -195,8 +177,26 @@ $(function () {
     }
   });
 
+
   $inputMessage.on("input", () => {
-    updateTyping();
+    if (connected) {
+      if (!typing) {
+        typing = true;
+        socket.emit("typing");
+      }
+      lastTypingTime = new Date().getTime();
+
+      // We need to detect if the user has stopped typing
+      // (no activity in TYPING_TIMER_LENGTH)
+      setTimeout(() => {
+        let typingTimer = new Date().getTime();
+        let timeDiff = typingTimer - lastTypingTime;
+        if (timeDiff >= TYPING_TIMER_LENGTH && typing) {
+          socket.emit("stop typing");
+          typing = false;
+        }
+      }, TYPING_TIMER_LENGTH);
+    }
   });
 
   // Click events
