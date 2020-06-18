@@ -4,10 +4,18 @@ This is the source code for a very simple chat example used for
 the [Getting Started](http://socket.io/get-started/chat/) guide
 of the Socket.IO website.
 
-Please refer to it to learn how to run this application.
+You can run this application by typing
 
-You can also spin up a free Heroku dyno to test it out:
+```
+npm install
+npm start
+```
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/socketio/chat-example)
+Once the application starts, go to http://localhost:3000 for an example.
 
-Besides, the application is deployed on [Now](https://zeit.co/now): https://socketio-chat-example.now.sh/
+A live example is available at https://blooming-lake-52202.herokuapp.com/
+
+You can also spin up a free Heroku dyno to test it out. Go to https://devcenter.heroku.com/articles/deploying-nodejs#deploy-your-application-to-heroku for further instructions.
+
+
+
